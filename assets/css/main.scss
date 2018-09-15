@@ -1,0 +1,122 @@
+// Sizes
+$playlist-height: calc(100vh - 105px);
+
+// Podcaster theme
+$header-bgcolor: #333;
+$header-text-color: #f1f1f1;
+$playlist-bgcolor: #e7e7e7;
+$track-text-color: #1a1a1a;
+$track-text-shadow-color: rgba(255, 255, 255, 0.6);
+$track-border-bottom-color: #fff;
+$track-current-text-color: #333;
+$track-current-bgcolor: #bdbdbd;
+$track-current-text-shadow-color: rgba(255, 255, 255, 0.6);
+
+html, body {
+    overflow: hidden;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+}
+h1 {
+    font-family: 'Roboto', sans-serif;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#wrapper {
+    max-width: 768px;
+    min-width: 320px;/*ref: iPhone 4*/
+}
+header {
+    background-color: $header-bgcolor;
+    color: $header-text-color;
+    padding: 1rem;
+}
+#audio-player {
+    audio#audio {
+        width: 100%;
+        background-color: #f1f3f4;
+    }
+}
+#playlist {
+    background-color: $playlist-bgcolor;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    height: $playlist-height;
+    overflow-y: auto;
+    position: relative;
+
+    li {
+        font-family: "Open Sans", Arial, sans-serif;
+        font-size: 0.9rem;
+        line-height: 1.4rem;
+        color: $track-text-color;
+        text-shadow: 0 1px 1px $track-text-shadow-color;
+        padding: 1.0rem;
+        border-bottom: 1px solid $track-border-bottom-color;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+            background-color: #ccc;
+            color: #1a1a1a;
+            text-shadow: 0;
+        }
+        &.current {
+            color: $track-current-text-color;
+            background-color: $track-current-bgcolor;
+            text-shadow: 0 1px 1px $track-current-text-shadow-color;
+        }
+        .name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+            font-weight: bold;
+            color: #3c526d;
+        }
+        .time {
+            position: absolute;
+            top: 0;
+            right: 1rem;
+            line-height: normal;
+            line-height: 3.4rem;
+        }
+        .info {
+            color: #222;
+            margin-top: .3rem;
+        }
+        .author {
+            font-style: italic;
+            color: #555;
+            margin-top: .2rem;
+        }
+    }
+}
+#info-box {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    text-align: center;
+    padding-top: 8%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    color: $track-current-text-color;
+}
+
+// Large screens
+@media only screen and (min-width: 768px) {
+    #wrapper {
+        margin: 0 auto;
+    } 
+}
