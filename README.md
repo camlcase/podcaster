@@ -12,7 +12,7 @@ Podcaster runs on the PHP 7.x platform, but has also been tested with PHP 5.6.35
 
 ## Features
 ### Audio Player
-The player uses [the embed audio element]("https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio"), which is controlled by the  **camlcase.player** javascript module. The player interface is left as rendered by each browser. _See Browser Support below._
+The player uses [the embed audio element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio), which is controlled by the  **camlcase.player** javascript module. The player interface is left as rendered by each browser. _See Browser Support below._
 
 ### Playlist
 The playlist is generated in a plain list using a MySQL/MariaDB data source. There is also a caching mechanism which stores a json representation, physical on disk inside the cache project folder. The cache will be restored when a new audio file is added to the podcaster using the admin interface. _See Admin below._
@@ -32,9 +32,12 @@ The Podcaster has been tested with Chrome 69, Firefox 62, Edge 42 and Internet E
 
 ## Third Party Software
 The following third party softwares has been used.
-* [Bootstrap 3 Datepicker]("https://eonasdan.github.io/bootstrap-datetimepicker/")
-* [Dropzone]("https://www.dropzonejs.com/")
-* [Moment]("https://momentjs.com/")
+* [jQuery](https://jquery.com/)
+* [jQuery Easing Plugin](http://gsgd.co.uk/sandbox/jquery/easing/)
+* [Bootstrap](https://getbootstrap.com/)
+* [Bootstrap 3 Datepicker](https://eonasdan.github.io/bootstrap-datetimepicker/)
+* [Dropzone](https://www.dropzonejs.com/)
+* [Moment](https://momentjs.com/)
 
 ## Contact
-Please feel free to [contact me]("https://martincarlsen.com").
+Please feel free to [contact me](https://martincarlsen.com).
