@@ -8,7 +8,7 @@
 
 html {
     height: 100%;
-    background: #333; /* fallback for old browsers */
+    background: #333;
     background: -webkit-linear-gradient(to left, #333, #222); /* Chrome 10-25, Safari 5.1-6 */
 }
 
@@ -168,16 +168,13 @@ body {
     position: absolute;
     left: -50%;
     top: 9px;
-    z-index: -1; /* put it behind the numbers */
+    z-index: -1;
 }
 
 #progressbar li:first-child:after {
-    /* connector not needed before the first step */
     content: none;
 }
 
-/* marking active/completed steps green*/
-/* the number of the step and the connector before it = green*/
 #progressbar li.active:before, #progressbar li.active:after {
     background: #ee0979;
     color: white;

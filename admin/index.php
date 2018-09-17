@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="../assets/css/vendor/dropzone-basic.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/vendor/dropzone.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/vendor/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/upload.css?v=1.0.0">
+    <link rel="stylesheet" type="text/css" href="../assets/css/upload.css">
 </head>
 
 <body>
@@ -68,6 +68,6 @@
 
     <script src="../assets/js/vendor/bootstrap-datetimepicker.min.js"></script>
     <script src="../assets/js/vendor/dropzone.js"></script>
-    <script src="../assets/js/podcaster.admin.js?v=1.0.0"></script>
+    <script src="../assets/js/podcaster.admin.js"></script>
 </body>
 </html>

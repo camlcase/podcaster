@@ -2,7 +2,7 @@
  * podcaster.player.js
  * @namespace podcaster
  * @description Podcaster HTML5 Audio Player module.
- * @version 1.0.0
+ * @version 1.1.0
  */
 (function (podcaster) {
 
@@ -11,30 +11,91 @@
 
         var module = {}, 
             currentTrack = null, 
-            audio, playlist, infoBox,
+            audio, playlist, infoBox, trackBasePath,
             messages = {
-                noTracks: 'No tracks available ...'
+                noTracks: 'Playlist could not be loaded ...',
+                loading: 'Loading ...'
             };
 
-        function formatDate(dateStr) {
-            var date = new Date(dateStr +'T00:00:00'),
-                options = {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                };
+        function getJSON(url, callback) {
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function () {
+                if (req.readyState === XMLHttpRequest.DONE) {
+                    if (req.status === 200 && callback) {
+                        callback(JSON.parse(req.responseText));
+                    }
+                }
+            }
+            req.open('GET', url, true);
+            req.send(null);
+        }
+        function renderTemplate(id, obj) {
+            var regex = /{{(.*?)}}/igm,
+            match,
+            tmpl = document.getElementById(id),
+            html = '',
+            m0, m1;
+            tmpl = (tmpl !== null) ? tmpl.innerHTML : id;
 
-            return date.toLocaleDateString('en-US', options);
+            function assemle(o) {
+                var html = tmpl;
+
+                while (match = regex.exec(html)) {
+                    m0 = match[0];//{{title}} or {{date.ymd}}
+                    m1 = match[1];//title or date.ymd
+
+                    if (o.hasOwnProperty(m1)) {
+                        html = html.replace(m0, o[m1]);
+                    } else if (m1.indexOf('.') != -1) {
+                        try {
+                            html = html.replace(m0, new Function('obj', 'return obj.' + m1)(o));
+                        } catch (ex) {
+                            html = html.replace(m0, '');
+                        }
+                    }
+                }
+                return html;
+            }
+
+            if (obj && !obj.length) {
+                html = assemle(obj);
+            } else {
+                for (var i = 0, len = obj.length; i < len; i++) {
+                    html += assemle(obj[i]);
+                }
+            }
+            return html;
+        }
+        function renderPlaylist() {
+            getJSON('services/playlist.php', function (data) {
+                if (!data || !data.tracks || data.tracks.length === 0) {
+                    return showMessage(messages.noTracks);
+                }
+                trackBasePath = data.config.baseUrl;
+                audio.src = trackBasePath + data.tracks[0].filename;
+                playlist.innerHTML = renderTemplate('template', data.tracks);
+
+                var tracks = document.querySelectorAll('#playlist li');
+                for (var i = 0; i < tracks.length; i++) {
+                    tracks[i].addEventListener('click', onPlaylistClick, false);
+                }
+            });
         }
         function play(target) {
-            currentTrack = target;
-            audio.src = data.config.baseUrl + target.getAttribute('data-track-filename');
-            audio.play();
-
-            for (var i = 0; i < playlist.childNodes.length; i++) {
-                playlist.childNodes[i].classList.remove('current');
+            currentTrack = (target.nodeName === '#text') ? target.nextSibling : target;
+            if (currentTrack === null) {
+                return;
             }
-            target.classList.add('current');
+
+            audio.src = trackBasePath + currentTrack.getAttribute('data-track-filename');
+            audio.play();
+            for (var i = 0; i < playlist.childNodes.length; i++) {
+                var node = playlist.childNodes[i];
+                if (node.nodeName !== '#text') {
+                    node.classList.remove('current');
+                }
+            }
+            currentTrack.classList.add('current');
         }
         function onPlaylistClick(e) {
             e.preventDefault();
@@ -47,90 +108,30 @@
                 play(nextTrack);
             }
         }
-        function addTrack(track) {
-            var timeFormatted = new Date(track.duration * 1000).toISOString().substr(11, 8);
-            if (timeFormatted.startsWith('00:')) {
-                timeFormatted = timeFormatted.substring(3, timeFormatted.length);
-            }
-
-            var li = document.createElement('li'),
-                trackName = document.createTextNode(track.title),
-                trackNameSpan = document.createElement('div'),
-                timeSpan = document.createElement('div'),
-                duration = document.createTextNode(formatDate(track.the_date) + ' | ' + timeFormatted),
-                description = document.createTextNode(track.description),
-                descriptionSpan = document.createElement('div'),
-                author = document.createTextNode('Author: ' + track.author),
-                authorSpan = document.createElement('div');
-
-            li.setAttribute('data-track-filename', track.filename);
-            timeSpan.setAttribute('class', 'time');
-            descriptionSpan.setAttribute('class', 'info');
-            authorSpan.setAttribute('class', 'author');
-            trackNameSpan.setAttribute('class', 'name');
-
-            timeSpan.appendChild(duration);
-            descriptionSpan.appendChild(description);
-            authorSpan.appendChild(author);
-            trackNameSpan.appendChild(trackName);
-
-            li.appendChild(trackNameSpan);
-            if (description) {
-                li.appendChild(descriptionSpan);
-            }
-            li.appendChild(authorSpan);
-            li.appendChild(timeSpan);
-
-            playlist.appendChild(li);
-            
-            li.addEventListener('click', onPlaylistClick, false);
-        }
-        function toggleInfoMess(text) {
+        function showMessage(text) {
             infoBox.textContent = text;
-            if (infoBox.style.display === 'none') {
-                infoBox.style.display = 'block';
-            } else {
-                infoBox.style.display = 'none';
-            }
-        }
-        function populateTracks() {
-            if (data.tracks.length > 0) {
-                audio.src = data.config.baseUrl + data.tracks[0].filename;
-                for (var i = 0; i < data.tracks.length; i++) {
-                    addTrack(data.tracks[i]);
-                }
-            } else {
-                toggleInfoMess(messages.noTracks);
-            }
+            infoBox.style.display = 'block';
         }
         function bind() {
             audio.addEventListener('ended', onTrackEnded, false);
-        }
-        function polyfill() {//IE11 support
-            if (!String.prototype.startsWith) {
-                String.prototype.startsWith = function(search, pos) {
-                    return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
-                };
-            }
         }
         function setupPlayer() {
             var height = audio.offsetHeight + 51;
             playlist.style.height = 'calc(100vh - ' + height + 'px)';
 
             infoBox = document.createElement('div');
+            infoBox.textContent = messages.loading;
             infoBox.id = 'info-box';
-            infoBox.style.display = 'none';
+            infoBox.style.display = 'block';
             playlist.appendChild(infoBox);
         }
 
         module.init = function () {
             audio = document.getElementById('audio');
             playlist = document.getElementById('playlist');
-
-            polyfill();
             bind();
             setupPlayer();
-            populateTracks();
+            renderPlaylist();
         };
 
         return module;

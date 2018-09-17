@@ -8,7 +8,12 @@ class DataAccess {
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"
          ));
          
-         $stmt = $dbh->prepare("SELECT `title`, `date`, DATE_FORMAT(date, '%Y-%m-%d') as the_date, `author`, `duration`, `filename`, `description` FROM `podcaster` ORDER BY `date` DESC");
+         $stmt = $dbh->prepare("SELECT 
+            `title`, 
+            DATE_FORMAT(date, '%d %b, %Y') as the_date, 
+            TIME_FORMAT(SEC_TO_TIME(duration),'%i:%s') as the_duration,
+            `author`, `filename`, `description` 
+            FROM `podcaster` ORDER BY `date` DESC");
          $stmt->execute();
       
          $result = $stmt->fetchAll();

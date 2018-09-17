@@ -25,8 +25,14 @@
         <ul id="playlist"></ul>
     </div>
 
-<?php include 'playlist.inc.php'; ?>
-
-<script src="assets/js/podcaster.player.js?v=1.0.0"></script>
+    <script id="template" type="text/x-jstemplate">
+        <li data-track-filename="{{filename}}">
+            <div class="name">{{title}}</div>
+            <div class="info">{{description}}</div>
+            <div class="author">Author: {{author}}</div>
+            <div class="time">{{the_date}} | {{the_duration}}</div>
+        </li>
+    </script>
+    <script src="assets/js/podcaster.player.js?v=1.1.0"></script>
 </body>
 </html>
