@@ -1,6 +1,8 @@
 # Podcaster
 Podcaster is an HTML5 audio player with playlist and admin interface.
 
+![alt tag](https://martincarlsen.com/assets/download/podcaster-github-repo-image.png "Podcaster")
+
 ## Usage
 Place the whole project in a PHP-enabled server folder of your choice. Use the _DB/podcaster.sql to generate the database table needed. Goto lib/config.php to adjust the database configuration to match your environment.
 
