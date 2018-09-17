@@ -28,7 +28,7 @@ body {
     font-weight: bold;
 }
 
-/* form styles */
+// form styles
 #msform {
     text-align: center;
     position: relative;
@@ -51,7 +51,7 @@ body {
     display: none;
 }
 
-/* inputs */
+// inputs
 #msform input, #msform textarea {
     padding: 15px;
     border: 1px solid #ccc;
@@ -76,7 +76,7 @@ body {
     -o-transition: All 0.5s ease-in;
 }
 
-/* buttons */
+// buttons
 #msform .action-button {
     width: 100px;
     background: #ee0979;
@@ -109,7 +109,7 @@ body {
     box-shadow: 0 0 0 2px white, 0 0 0 3px #C5C5F1;
 }
 
-/* headings */
+// headings
 .fs-title {
     font-size: 18px;
     text-transform: uppercase;
@@ -126,11 +126,11 @@ body {
     margin-bottom: 20px;
 }
 
-/* progressbar */
+// progressbar
 #progressbar {
     margin-bottom: 30px;
     overflow: hidden;
-    /* CSS counters to number the steps */
+    // CSS counters to number the steps
     counter-reset: step;
 }
 
@@ -159,7 +159,7 @@ body {
     margin: 0 auto 10px auto;
 }
 
-/* progressbar connectors */
+// progressbar connectors
 #progressbar li:after {
     content: '';
     width: 100%;
