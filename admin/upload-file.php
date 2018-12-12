@@ -10,11 +10,12 @@ if (!empty($_FILES) && isValidExtension($_FILES['file']['name'])) {
 
    $tempFile = $_FILES['file']['tmp_name'];
    $targetPath = dirname( __FILE__ ) . $ds . $storeFolder . $ds;
-   $targetFile =  $targetPath . uniqid() . '.mp3';
+   $newFileName = uniqid() . '.mp3';
+   $targetFile =  $targetPath . $newFileName;
 
    move_uploaded_file($tempFile, $targetFile);
 
-   http_response_code(200);
+   echo $newFileName;
 } else {
     http_response_code(500);
 }

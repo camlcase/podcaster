@@ -2,7 +2,7 @@
  * podcaster.admin.js
  * @namespace podcaster
  * @description Podcaster admin module.
- * @version 1.0.1
+ * @version 1.0.2
  */
 (function (podcaster, Dropzone) {
 
@@ -127,7 +127,8 @@
 			dictDefaultMessage: messages.dropAudioFile,
 			dictInvalidFileType: messages.invalidFileType,
 			success: function (file, response, e) {		
-				filename = file.name;
+				filename = response;
+				$('#audio').attr('src', '../tracks/' + filename);
 				$('.next').prop('disabled', false);
 			},
 			error: function (file, message, xhr) {
