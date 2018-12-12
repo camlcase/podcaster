@@ -2,7 +2,7 @@
  * podcaster.admin.js
  * @namespace podcaster
  * @description Podcaster admin module.
- * @version 1.0.0
+ * @version 1.0.1
  */
 (function (podcaster, Dropzone) {
 
@@ -20,6 +20,7 @@
 				dropAudioFile: 'Drop your audio file here to upload, or click to select',
 				invalidFileType: 'Only mp3-files can be uploaded',
 				errorUploadAudio: 'An error occured!\nYou must upload an audio file.',
+				errorServer: 'An error has occured! Please try again.',
 				errorAllFields: 'An error occured!\nAll fields with * must be filled in.',
 				errorSaving: 'Could not save. Please try again.'
             };
@@ -62,14 +63,20 @@
 			current_fs = $('fieldset:visible');
 			next_fs = current_fs.next();
 			
+			// Activate next step on progressbar
 			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 			
 			next_fs.show(); 
 		
+			// Hide the current fieldset
 			current_fs.animate({opacity: 0}, {
 				step: function(now, mx) {
+					// as the opacity of current_fs reduces to 0 - stored in "now"
+					// 1. scale current_fs down to 80%
 					scale = 1 - (1 - now) * 0.2;
+					// 2. bring next_fs from the right(50%)
 					left = (now * 50)+"%";
+					// 3. increase opacity of next_fs to 1 as it moves in
 					opacity = 1 - now;
 					current_fs.css({
 				'transform': 'scale('+scale+')',
@@ -82,6 +89,7 @@
 					current_fs.hide();
 					animating = false;
 				}, 
+				// this comes from the custom easing plugin
 				easing: 'easeInOutBack'
 			});
 		}
@@ -89,17 +97,23 @@
 			if (animating) return false;
 			animating = true;
 			
-			current_fs = $('fieldset:visible');
-			previous_fs = current_fs.prev();
+			current_fs = $('fieldset:visible');//self.parent();
+			previous_fs = current_fs.prev();//self.parent().prev();
 			
+			//de-activate current step on progressbar
 			$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 			
+			//show the previous fieldset
 			previous_fs.show(); 
-
+			//hide the current fieldset with style
 			current_fs.animate({opacity: 0}, {
 				step: function(now, mx) {
+					//as the opacity of current_fs reduces to 0 - stored in "now"
+					//1. scale previous_fs from 80% to 100%
 					scale = 0.8 + (1 - now) * 0.2;
+					//2. take current_fs to the right(50%) - from 0%
 					left = ((1-now) * 50)+"%";
+					//3. increase opacity of previous_fs to 1 as it moves in
 					opacity = 1 - now;
 					current_fs.css({'left': left});
 					previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
@@ -109,6 +123,7 @@
 					current_fs.hide();
 					animating = false;
 				}, 
+				//this comes from the custom easing plugin
 				easing: 'easeInOutBack'
 			});
 		}
@@ -127,12 +142,12 @@
 			acceptedFiles: '.mp3',
 			dictDefaultMessage: messages.dropAudioFile,
 			dictInvalidFileType: messages.invalidFileType,
-			success: function (file, response, e) {
-				$('#audio').attr('src', '../tracks/' + file.name);		
-				if (response === 'success') {
-					filename = file.name;
-					$('.next').prop('disabled', false);
-				}
+			success: function (file, response, e) {		
+				filename = file.name;
+				$('.next').prop('disabled', false);
+			},
+			error: function (file, message, xhr) {
+				alert(messages.errorServer);
 			}
 		};
 
